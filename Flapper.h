@@ -3,47 +3,47 @@
 #define FLAPPER_H
 
 
-
-#include "raylib.h"
 #include <list>
+#include <vector>
+#include "raylib.h"
 
 
 
 class World {
 private:
 	
-	std::list<Rectangle> pipe_up_List;
-	std::list<Rectangle> pipe_down_List;
-	std::list<Rectangle>::iterator pipe_up_it;
-	std::list<Rectangle>::iterator pipe_down_it;
-	//pipe decl
-	float pipe_up_height;
+	float upHeight;
 	float width;
-	float pipe_up_Y;
-	float pipe_up_X;
-	float pipe_down_height;
-	float pipe_down_Y;
-	float pipe_down_X;
+	float upY;
+	float upX;
+	float downHeight;
+	float downY;
+	float downX;
 	float pipe_x_movement=-8;
 
 
 protected:
+	std::vector<Rectangle> pipe_up_List;
+	std::vector<Rectangle> pipe_down_List;
+	std::vector<Rectangle>::iterator pipe_up_it;
+	std::vector<Rectangle>::iterator pipe_down_it;
 
 	float g = ( - 4);
+	
 
-	//pipe declaretion;
+    //pipe declaretion;
 	Rectangle pipe_up = {
-		pipe_up_X,
-		pipe_up_Y,//random but not 0
+		upX,
+		upY,//random but not 0
 		width,
-		pipe_up_height//random
+		upHeight//random
 	};
 	
 	Rectangle pipe_down = {
-		pipe_down_X,
-		pipe_down_Y,//pipe_up_height -100
+		downX,
+		downY,//pipe_up_height -100
 		width,
-		pipe_down_height//should be the diffirence of the wideness and the up pipe's height
+		downHeight//should be the diffirence of the wideness and the up pipe's height
 	};
 
 public:
@@ -51,33 +51,50 @@ public:
 	int screenHeight = 600;
 	int screenWidth = 800;
 	float t_pipe;
-	
+	int skor=0;
 	void Update();
 	void draw_pipe() ;
 	void pipe_Generation();
 	void pipe_Deletion();
 	void pipe_Movement();
+	void skorbord();
+	const std::vector<Rectangle>& get_pipe_up_List() const {
+		return pipe_up_List; 
+	}
+
+	const std::vector<Rectangle>& get_pipe_down_List() const { 
+		return pipe_down_List; 
+	}
+	const float get_g() const {
+		return g;
+	}
 };
 
 
 
-class Flappy: public World {
+
+class Flappy {
+	World& world;
 	
 private:
 	float radius;
 	Color renk;
 	float konum_x;
 	float konum_y;
+	Vector2 konumlar = {
+		konum_x,
+		konum_y
+	};
 	int jump;
 	float t;
-	void Check_Death();//Collision Detect , Check after Drawing
-	bool Check_Key();
+	bool Check_Key();//done
 
 public:
-	Flappy();
-	void movement();
-	void drawFlappy() const;
-	void check_Border();
+	Flappy(World& w);
+	bool Check_Death(World& world);//Collision Detect , Check after Drawing
+	void movement(World& world);//done
+	void drawFlappy() const;//done
+	void check_Border();//done
 
 
 };

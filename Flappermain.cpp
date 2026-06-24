@@ -4,30 +4,43 @@
 using namespace std;
 
 int main() {
-	World world;
-	World pipe;
-	Flappy bird;
-	InitWindow(world.screenWidth, world.screenHeight, "Flappy Bird");
-	InitAudioDevice();
+	
+	InitWindow(800,600, "Flappy Bird");
+	//InitAudioDevice();
 	SetTargetFPS(30);
-
-
-	while (!WindowShouldClose())
+	World pipe;
+	Flappy bird(pipe);
+	int gameOver=1;
+	while(!WindowShouldClose){
+	while (gameOver==1)
 	{
-		world.Update();
+		gameOver = !bird.Check_Death(pipe);
+
+		pipe.Update();
 
 		BeginDrawing();
 		ClearBackground(BLACK);
 
 		pipe.draw_pipe();
-
+		bird.check_Border();
+	
 
 		bird.drawFlappy();
-		bird.movement();
-		bird.check_Border();
-
+		bird.movement(pipe); 
+		
+			
 		
 		EndDrawing();
 	}
+	while (gameOver==0) 
+	{
+			BeginDrawing();
+			ClearBackground(WHITE);
+			DrawText("GAME OVER", 300, 280, 40, RED);
+			EndDrawing();
+
+	}
+	}
+	
 	return 0;
 }
